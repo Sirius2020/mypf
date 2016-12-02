@@ -1,6 +1,6 @@
 <?php
 /**
- * @desc 文件配置访问驱动
+ * @desc 文件配置类
  */
 
 class Sys_Config{

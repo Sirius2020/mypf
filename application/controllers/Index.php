@@ -31,14 +31,8 @@ class IndexController extends Yaf_Controller_Abstract {
 		return TRUE;
 	}
 	public function testAction(){
-		$sample_config = Sys_Config::getInstance('sample');
-		$db_config = Sys_Config::getInstance('db');
-		$config1 = $sample_config->getKey('sample_config_1');
-		var_dump($config1);
-		$app = $db_config->getKey('app');
-		var_dump($app);
-		$config2 = $sample_config->getKey('sample_config_3');
-		var_dump($config2);
+		Sys_Log::error('bad input.');
+		Sys_log::warning('warning!!!');
 		return false;
 	}
 }
