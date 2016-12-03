@@ -31,8 +31,17 @@ class IndexController extends Yaf_Controller_Abstract {
 		return TRUE;
 	}
 	public function testAction(){
-		Sys_Log::error('bad input.');
-		Sys_log::warning('warning!!!');
+// 		$db = new Db_Pdo_Table('test', 'test');
+// 		$res = $db->query('select * from test limit 5;');
+// 		$res = $db->query('update test set id=1 where id=100;');
+// 		var_dump($res);
+// 		$db = new Db_Pdo_Table('test');
+// 		$db->getTb('*', array('id', '=', '2'));
+		$db = new Db_Pdo_Table('test', 'test');
+		$db->transBegin();
+		$res = $db->query('update test set id=100 where id=1');
+		var_dump($res);
+		$db->transCommit();
 		return false;
 	}
 }
