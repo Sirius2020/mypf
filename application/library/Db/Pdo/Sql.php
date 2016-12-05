@@ -4,7 +4,7 @@ class Db_Pdo_Sql{
 
 	public $table = '';
 	public $verb = '';
-	public $fields = '';
+	public $fields = '*';
 	public $where = array();
 	public $set = array();
 	public $group = array();
@@ -25,10 +25,15 @@ class Db_Pdo_Sql{
 	}
 
 	public function insert($table, $type){
-		if (in_array(strtolower($type), array('replace', 'ignore'))){
-			$this->verb = $type;
+		if ($type == 'replace'){
+			$this->verb = 'replace';
 		}
-		$this->verb = 'insert';
+		else if ($type == 'ignore'){
+			$this->verb = 'insert ignore';
+		}
+		else{
+			$this->verb = 'insert';
+		}
 		$this->table = $table;
 		return $this;
 	}
@@ -39,7 +44,7 @@ class Db_Pdo_Sql{
 		return $this;
 	}
 
-	public function update(){
+	public function update($table){
 		$this->verb = 'update';
 		$this->table = $table;
 		return $this;
@@ -73,6 +78,9 @@ class Db_Pdo_Sql{
 	 * 数组或二维数组	array('field', '=', 'value')或array(array(...), array(...));
 	 */
 	public function where($where){
+		if (!$where){
+			return $this;
+		}
 		$check_dimension = current($where);
 		if (is_array($check_dimension)){
 			foreach($where as $v){
@@ -115,14 +123,24 @@ class Db_Pdo_Sql{
 		return $this;
 	}
 
-	public function limit($m, $n){
-		$this->limit = array($m, $n);
+	/**
+	 * 二维数组 array(m,n)
+	 */
+	public function limit($limit){
+		$this->limit = $limit;
 	}
 
 	public function prepare(&$statement, &$bindParams){
+		if (!$this->verb || !$this->table){
+			return false;
+		}
+		$bindParams = array();
 		switch($this->verb){
 		case 'select':
 			{
+				if (empty($this->where) && empty($this->limit) && strpos($this->fields, 'count')===false ){
+					return false;
+				}
 				$statement = 'select '.$this->fields.' from '.$this->table.' ';
 				$this->_makeWhere($statement, $bindParams);
 				$this->_makeGroup($statement);
@@ -130,7 +148,42 @@ class Db_Pdo_Sql{
 				$this->_makeLimit($statement);
 			}
 			break;
+		case 'delete':
+			{
+				if (empty($this->where)){
+					return false;
+				}
+				$statement = 'delete from '.$this->table.' ';
+				$this->_makeWhere($statement, $bindParams);
+				$this->_makeOrder($statement);
+				$this->_makeLimit($statement);
+			}
+			break;
+		case 'update':
+			{
+				if (empty($this->where) || empty($this->set)){
+					return false;
+				}
+				$statement = 'update '.$this->table.' ';
+				$this->_makeSet($statement, $bindParams);
+				$this->_makeWhere($statement, $bindParams);
+				$this->_makeOrder($statement);
+				$this->_makeLimit($statement);
+			}
+			break;
+		case 'insert':
+		case 'insert ignore':
+		case 'replace':
+			{
+				if (empty($this->set)){
+					return false;
+				}
+				$statement = $this->verb.' into '.$this->table.' ';
+				$this->_makeSet($statement, $bindParams);
+			}
+			break;
 		}
+		return true;
 	}
 
 	private function _makeSet(&$statement, &$bindParams){
@@ -181,7 +234,7 @@ class Db_Pdo_Sql{
 	}
 
 	private function _makeLimit(&$statement){
-		if ($this->limit){
+		if (!empty($this->limit)){
 			$statement .= 'limit '.$this->limit[0].', '.$this->limit[1].' ';
 		}
 	}
