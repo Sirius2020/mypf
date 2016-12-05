@@ -5,6 +5,8 @@
 
 class Sys_Config{
 
+	private function __construct(){}
+
 	static public function getInstance($module){
 		static $configs = array();
 		if (!isset($configs[$module])){

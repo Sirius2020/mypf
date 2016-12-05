@@ -1,8 +1,7 @@
 <?php
 
 $db = array(
-	'app'=>array(
-		'db'=>'test',
+	'test'=>array(
 		'master'=>array(
 			'host'=>'localhost',
 			'user'=>'root',
