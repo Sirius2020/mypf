@@ -4,7 +4,7 @@
  * @pdo连接类
  */
 
-class Db_Pdo_Connect {
+class Data_Pdo_Connect {
 
 	static private $_conn;
 

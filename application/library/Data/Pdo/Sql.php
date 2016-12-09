@@ -1,6 +1,6 @@
 <?php
 
-class Db_Pdo_Sql{
+class Data_Pdo_Sql{
 
 	public $table = '';
 	public $verb = '';

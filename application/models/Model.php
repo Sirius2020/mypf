@@ -12,7 +12,7 @@ class modelModel{
 		}
 		list($key, $value) = explode('_', $name);
 		if ($key === 'pdo'){
-			$this->name = new Db_Pdo_Table($value);
+			$this->name = new Data_Pdo_Table($value);
 			return $this->name;
 		}
 		else{

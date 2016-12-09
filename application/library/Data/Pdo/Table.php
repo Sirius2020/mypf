@@ -1,6 +1,6 @@
 <?php
 
-class Db_Pdo_Table{
+class Data_Pdo_Table{
 
 	private $_table;
 	private $_dbConn;
@@ -10,7 +10,7 @@ class Db_Pdo_Table{
 	public function __construct($tableName){
 		$this->_transactionBegin = false;
 		$this->_table = $tableName;
-		$this->_statement = new Db_Pdo_Sql();
+		$this->_statement = new Data_Pdo_Sql();
 	}
 
 	public function __destruct(){
@@ -54,11 +54,11 @@ class Db_Pdo_Table{
 
 	/**
 	 * @desc prepare方式执行一个sql语句
-	 * @param Db_Pdo_Sql $sql
+	 * @param Data_Pdo_Sql $sql
 	 * @param string $isMaster
 	 * @return boolean|PDOStatement object
 	 */
-	public function execute(Db_Pdo_Sql $sql, $isMaster = false){
+	public function execute(Data_Pdo_Sql $sql, $isMaster = false){
 		if (!$sql->prepare($statement, $bindParams)){
 			Sys_Log::error('Prepare statement error, '.var_export($sql, true));
 			return false;
@@ -116,7 +116,7 @@ class Db_Pdo_Table{
 
 	private function getDb($queryType = 'master', $isReconnect = false){
 		if (!isset($this->_dbConn[$queryType]) || $isReconnect){
-			$this->_dbConn[$queryType] = Db_Pdo_Connect::getConnect($this->_table, $queryType=='master' ? true : false, $isReconnect);
+			$this->_dbConn[$queryType] = Data_Pdo_Connect::getConnect($this->_table, $queryType=='master' ? true : false, $isReconnect);
 		}
 		return $this->_dbConn[$queryType];
 	}

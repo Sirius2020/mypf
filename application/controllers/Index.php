@@ -31,18 +31,32 @@ class IndexController extends Yaf_Controller_Abstract {
 		return TRUE;
 	}
 	public function testAction(){
-		$db = new Db_Pdo_Table('test');
-		$data = array();
-		$data[] = array(
-			'name'=>'somebody1',
-			'comment'=>'comment1',
-		);
-		$data[] = array(
-			'name'=>'somebody2',
-			'comment'=>'comment2',
-		);
-		$res = $db->addBatch($data, 'ignore');
-		var_dump($res);
+		$http = new Data_Http_Curl();
+		$res = $http->request('get', 'https://localhost', array('aaa'=>'ad fas', 'b'=>'asdgasdg'), array('my_head'=>'asdf'));
+		if ($res){
+			var_dump($res);
+		}
+		else{
+			var_dump($http->getError());
+		}
+//		var_dump($http->getResponseHeader());
+//		var_dump($http->getCurlInfo());
+//		var_dump($http->getResponseHeader());
+// 		$mod = new testModel();
+// 		$res = $mod->getInfoList(1);
+// 		var_dump($res);
+// 		$db = new Data_Pdo_Table('test');
+// 		$data = array();
+// 		$data[] = array(
+// 			'name'=>'somebody1',
+// 			'comment'=>'comment1',
+// 		);
+// 		$data[] = array(
+// 			'name'=>'somebody2',
+// 			'comment'=>'comment2',
+// 		);
+// 		$res = $db->addBatch($data, 'ignore');
+// 		var_dump($res);
 // 		$db->transBegin();
 // 		$res = $db->query('update test set id=100 where id=1');
 // 		var_dump($res);
