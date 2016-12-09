@@ -43,7 +43,6 @@ class testModel extends modelModel{
 		$res = $this->pdo_test->getTb(array('id', '=', $id));
 		return $res;
 	}
-	//$where, $order = array(), $group = array(), $limit = array(), $fields = '*', $readMaster=false
 
 	public function getInfoList($page, $pageSize = 20){
 		$page = $page>=1 ? $page : 1;
@@ -51,7 +50,7 @@ class testModel extends modelModel{
 			($page-1)*$pageSize,
 			$pageSize,
 		);
-		$res = $this->pdo_test->getTb(array(), array(), array(), $limit);
+		$res = $this->pdo_test->getTb(array(), array('id desc'), array(), $limit);
 		return $res;
 	}
 }
