@@ -31,14 +31,29 @@ class IndexController extends Yaf_Controller_Abstract {
 		return TRUE;
 	}
 	public function testAction(){
-		$http = new Data_Http_Curl();
-		$res = $http->request('get', 'https://localhost', array('aaa'=>'ad fas', 'b'=>'asdgasdg'), array('my_head'=>'asdf'));
-		if ($res){
-			var_dump($res);
-		}
-		else{
-			var_dump($http->getError());
-		}
+		$start = microtime(true);
+		$http = new Data_Http_CurlMulti();
+		$params = array();
+		$params[] = array(
+			'method'=>'get',
+			'url'=>'http://localhosasdft/wqerwer',
+		);
+		$params[] = array(
+			'method'=>'get',
+			'url'=>'localhost/multi_curl/test_do_sth.php?type=2',
+		);
+		$res = $http->queryBatch($params);
+		var_dump($res);
+		$end = microtime(true);
+		echo "<br/>".($end-$start)."<br/>";
+//  		$http = new Data_Http_Curl();
+// 		$res = $http->request('get', 'http://localhosasdft/wqerwer', array('aaa'=>'ad fas', 'b'=>'asdgasdg'), array('my_head'=>'asdf'));
+// 		if ($res){
+// 			var_dump($res);
+// 		}
+// 		else{
+// 			var_dump($http->getError());
+// 		}
 //		var_dump($http->getResponseHeader());
 //		var_dump($http->getCurlInfo());
 //		var_dump($http->getResponseHeader());
