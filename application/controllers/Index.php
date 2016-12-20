@@ -31,21 +31,32 @@ class IndexController extends Yaf_Controller_Abstract {
 		return TRUE;
 	}
 	public function testAction(){
-		$start = microtime(true);
-		$http = new Data_Http_CurlMulti();
-		$params = array();
-		$params[] = array(
-			'method'=>'get',
-			'url'=>'http://localhosasdft/wqerwer',
-		);
-		$params[] = array(
-			'method'=>'get',
-			'url'=>'localhost/multi_curl/test_do_sth.php?type=2',
-		);
-		$res = $http->queryBatch($params);
-		var_dump($res);
-		$end = microtime(true);
-		echo "<br/>".($end-$start)."<br/>";
+		$redis = new Data_Redis_Redis();
+		try {
+			$key = 'test_key';
+			$redis->set($key, 566652, 60);
+			$res = $redis->get($key);
+			var_dump($res);
+			$ttl = $redis->ttl($key);
+			var_dump($ttl);
+		} catch (Exception $e) {
+			var_dump($e);
+		}
+// 		$start = microtime(true);
+// 		$http = new Data_Http_CurlMulti();
+// 		$params = array();
+// 		$params[] = array(
+// 			'method'=>'get',
+// 			'url'=>'http://localhosasdft/wqerwer',
+// 		);
+// 		$params[] = array(
+// 			'method'=>'get',
+// 			'url'=>'localhost/multi_curl/test_do_sth.php?type=2',
+// 		);
+// 		$res = $http->queryBatch($params);
+// 		var_dump($res);
+// 		$end = microtime(true);
+// 		echo "<br/>".($end-$start)."<br/>";
 //  		$http = new Data_Http_Curl();
 // 		$res = $http->request('get', 'http://localhosasdft/wqerwer', array('aaa'=>'ad fas', 'b'=>'asdgasdg'), array('my_head'=>'asdf'));
 // 		if ($res){
