@@ -79,6 +79,7 @@ class Data_Http_Curl{
 			$this->_responseHeader = $this->parseResponseHeader(substr($res, 0, $headerSize));
 			$this->_responseBody = substr($res, $headerSize);
 			$this->_error = array();
+			curl_close($ch);
 			return $this->_responseBody;
 		}
 		else{
@@ -87,6 +88,7 @@ class Data_Http_Curl{
 				'errno'=>curl_errno($ch),
 				'error'=>curl_error($ch),
 			);
+			curl_close($ch);
 			return false;
 		}
 	}
